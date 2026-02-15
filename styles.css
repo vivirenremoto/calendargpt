@@ -1,0 +1,163 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --muted: #71717a;
+  --accent: #4f46e5;
+  --accent-soft: #e0e7ff;
+  --border: #e5e7eb;
+  --danger: #b91c1c;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.2rem;
+}
+
+h1 { margin-top: 0; }
+
+.supabase-section,
+.controls,
+.calendar-section,
+.notes-section {
+  margin-top: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+
+.supabase-section { margin-top: 0; }
+
+
+.helper-text {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+#connectionStatus {
+  margin: 0.65rem 0 0;
+  font-size: 0.9rem;
+}
+
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  font-size: 0.9rem;
+}
+
+button, select, input {
+  font: inherit;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.65rem;
+}
+
+button {
+  cursor: pointer;
+  background: var(--card);
+}
+
+button:hover { border-color: var(--accent); }
+
+.weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.weekdays {
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.day-cell {
+  min-height: 90px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.35rem;
+  background: #fff;
+  text-align: left;
+}
+
+.day-cell.empty {
+  background: #fafafa;
+  border-style: dashed;
+}
+
+.day-cell .date {
+  font-weight: 600;
+}
+
+.day-cell .note-count {
+  margin-top: 0.3rem;
+  display: inline-block;
+  font-size: 0.78rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 0.12rem 0.45rem;
+}
+
+.day-cell.today { border-color: var(--accent); }
+.day-cell.selected { outline: 2px solid var(--accent); }
+
+#noteForm {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+#noteInput { flex: 1; }
+
+#notesList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.note-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+}
+
+.note-item button {
+  color: var(--danger);
+  border-color: #fecaca;
+}
+
+
+@media (max-width: 560px) {
+  .day-cell { min-height: 72px; }
+  #noteForm { flex-direction: column; }
+}
