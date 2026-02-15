@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario con notas (Supabase)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <main class="container">
+    <h1>Calendario con notas</h1>
+
+    <section class="supabase-section" aria-label="Configuración de Supabase">
+      <h2>Conexión a Supabase</h2>
+      <form id="supabaseForm" class="supabase-form">
+        <label>
+          Supabase URL
+          <input id="supabaseUrl" type="url" placeholder="https://tu-proyecto.supabase.co" required />
+        </label>
+
+        <label>
+          Supabase Anon Key
+          <input id="supabaseAnonKey" type="password" placeholder="eyJ..." required />
+        </label>
+
+        <button type="submit">Conectar</button>
+      </form>
+      <p id="connectionStatus">Sin conexión.</p>
+      <p class="helper-text">
+        Tabla esperada: <code>notes</code> con columnas <code>id</code> (uuid), <code>note_date</code> (date), <code>content</code> (text), <code>created_at</code> (timestamp).
+      </p>
+    </section>
+
+    <section class="controls" aria-label="Controles de calendario">
+      <button id="prevMonth" aria-label="Mes anterior">◀</button>
+
+      <label>
+        Mes
+        <select id="monthSelect"></select>
+      </label>
+
+      <label>
+        Año
+        <input id="yearInput" type="number" min="1900" max="2100" step="1" />
+      </label>
+
+      <button id="goToDate" type="button">Ir</button>
+      <button id="nextMonth" type="button" aria-label="Mes siguiente">▶</button>
+      <button id="todayBtn" type="button">Hoy</button>
+    </section>
+
+    <section class="calendar-section">
+      <h2 id="calendarTitle"></h2>
+      <div class="weekdays" aria-hidden="true">
+        <span>Lun</span><span>Mar</span><span>Mié</span><span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+      </div>
+      <div id="calendarGrid" class="calendar-grid" role="grid" aria-label="Calendario"></div>
+    </section>
+
+    <section class="notes-section" aria-live="polite">
+      <h3 id="selectedDateTitle">Selecciona un día para ver y crear notas</h3>
+      <form id="noteForm">
+        <input id="noteInput" type="text" placeholder="Escribe una nota" maxlength="160" required />
+        <button type="submit">Añadir nota</button>
+      </form>
+      <ul id="notesList"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
