@@ -12,9 +12,6 @@ const noteForm = document.getElementById('noteForm');
 const noteInput = document.getElementById('noteInput');
 const notesList = document.getElementById('notesList');
 
-const supabaseForm = document.getElementById('supabaseForm');
-const supabaseUrlInput = document.getElementById('supabaseUrl');
-const supabaseAnonKeyInput = document.getElementById('supabaseAnonKey');
 const connectionStatus = document.getElementById('connectionStatus');
 
 const state = {
@@ -47,17 +44,6 @@ function setStatus(text, isError = false) {
   connectionStatus.style.color = isError ? '#b91c1c' : '#166534';
 }
 
-function saveSupabaseConfig(url, anonKey) {
-  localStorage.setItem('supabase-url', url);
-  localStorage.setItem('supabase-anon-key', anonKey);
-}
-
-function loadSupabaseConfig() {
-  return {
-    url: localStorage.getItem('supabase-url') || '',
-    anonKey: localStorage.getItem('supabase-anon-key') || ''
-  };
-}
 
 function populateMonthSelect() {
   monthNames.forEach((name, index) => {
@@ -227,7 +213,6 @@ async function connectSupabase(url, anonKey) {
 
   state.connected = true;
   setStatus('Conectado a Supabase ✅');
-  saveSupabaseConfig(url, anonKey);
   await loadMonthNotes();
   renderNotes();
 }
@@ -259,16 +244,6 @@ document.getElementById('todayBtn').addEventListener('click', async () => {
   renderNotes();
 });
 
-supabaseForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const url = supabaseUrlInput.value.trim();
-  const anonKey = supabaseAnonKeyInput.value.trim();
-
-  if (!url || !anonKey) return;
-
-  setStatus('Conectando...');
-  await connectSupabase(url, anonKey);
-});
 
 noteForm.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -291,7 +266,11 @@ noteForm.addEventListener('submit', async (event) => {
     .insert({ note_date: state.selectedKey, content: value });
 
   if (error) {
-    alert(`No se pudo guardar la nota: ${error.message}`);
+    if (error.message && error.message.toLowerCase().includes('row-level security')) {
+      alert('No se pudo guardar por RLS. Ejecuta SUPABASE_SETUP.sql en Supabase para crear políticas de insert/select/delete para anon.');
+    } else {
+      alert(`No se pudo guardar la nota: ${error.message}`);
+    }
     return;
   }
 
@@ -304,13 +283,10 @@ populateMonthSelect();
 renderCalendar();
 renderNotes();
 
-const savedConfig = loadSupabaseConfig();
-supabaseUrlInput.value = savedConfig.url;
-supabaseAnonKeyInput.value = savedConfig.anonKey;
-
-if (savedConfig.url && savedConfig.anonKey) {
-  setStatus('Intentando reconectar...');
-  connectSupabase(savedConfig.url, savedConfig.anonKey);
+const appConfig = window.APP_CONFIG || {};
+if (appConfig.supabaseUrl && appConfig.supabaseAnonKey) {
+  setStatus('Conectando automáticamente...');
+  connectSupabase(appConfig.supabaseUrl, appConfig.supabaseAnonKey);
 } else {
-  setStatus('Sin conexión. Ingresa URL y Anon Key de Supabase.');
+  setStatus('Falta configuración. Edita config.js con tu URL y Anon Key de Supabase.', true);
 }

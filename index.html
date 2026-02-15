@@ -6,6 +6,7 @@
   <title>Calendario con notas (Supabase)</title>
   <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
 </head>
 <body>
   <main class="container">
@@ -13,22 +14,12 @@
 
     <section class="supabase-section" aria-label="Configuración de Supabase">
       <h2>Conexión a Supabase</h2>
-      <form id="supabaseForm" class="supabase-form">
-        <label>
-          Supabase URL
-          <input id="supabaseUrl" type="url" placeholder="https://tu-proyecto.supabase.co" required />
-        </label>
-
-        <label>
-          Supabase Anon Key
-          <input id="supabaseAnonKey" type="password" placeholder="eyJ..." required />
-        </label>
-
-        <button type="submit">Conectar</button>
-      </form>
       <p id="connectionStatus">Sin conexión.</p>
       <p class="helper-text">
-        Tabla esperada: <code>notes</code> con columnas <code>id</code> (uuid), <code>note_date</code> (date), <code>content</code> (text), <code>created_at</code> (timestamp).
+        Esta app usa <code>config.js</code> para conectarse a Supabase automáticamente (sin formulario).
+      </p>
+      <p class="helper-text">
+        Si ves error de RLS, ejecuta el script <code>SUPABASE_SETUP.sql</code> en tu proyecto Supabase.
       </p>
     </section>
 
